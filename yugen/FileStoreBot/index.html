@@ -306,6 +306,7 @@
   });
 </script>
 <script>
+
 function toggleDarkMode() {
   document.body.classList.toggle('dark');
   const modeIcon = document.getElementById('mode-icon');
@@ -321,6 +322,20 @@ function toggleDarkMode() {
     localStorage.setItem('theme', 'light');
   }
 }
+window.onload = function() {
+  const savedTheme = localStorage.getItem('theme');
+  const icon = document.getElementById('mode-icon');
+  if (savedTheme === 'dark') {
+    document.body.classList.add('dark');
+    icon.textContent = '☀️';
+    icon.textContent = "Light Mode";
+  } else {
+    document.body.classList.remove('dark');
+    icon.textContent = '🌙';
+    icon.textContent = "Dark Mode";
+  }
+};
+
 </script>
 
 </body>
