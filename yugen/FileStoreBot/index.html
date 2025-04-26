@@ -266,14 +266,43 @@
 </footer>
 
 <script>
-    fetch('https://api.countapi.xyz/hit/voatxm-yugen-filestorebot/visits')
-    .then(response => response.json())
-    .then(data => {
-        document.getElementById('viewCount').innerText = data.value;
-    })
-    .catch(error => {
-        console.error('Error fetching view count:', error);
-    });
+  const BIN_ID = '680cc0a88a456b796691cf79';
+  const API_KEY = '$2a$10$MblTYA9OMNY3BjvRhswtFuhZGpLhZjDFXL9FUb4MdwJVjqAfZUtaW';
+  fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+    method: 'GET',
+    headers: {
+      'X-Master-Key': API_KEY
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log("Response from API:", JSON.stringify(data, null, 2));
+
+    if (data && data.record && data.record.counter !== undefined) {
+      let currentCount = data.record.counter; // Get current counter from the bin
+      currentCount++;
+      fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Master-Key': API_KEY
+        },
+        body: JSON.stringify({
+          counter: currentCount
+        })
+      })
+      .then(response => response.json())
+      .then(updatedData => {
+        document.getElementById('viewCount').innerText = updatedData.record.counter;
+      })
+      .catch(error => console.error('Error updating counter:', error));
+    } else {
+      console.error("Counter not found in response:", data);
+    }
+  })
+  .catch(error => {
+    console.error('Error fetching counter:', error);
+  });
 </script>
 <script>
 function toggleDarkMode() {
