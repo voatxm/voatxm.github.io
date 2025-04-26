@@ -192,14 +192,16 @@ function toggleDarkMode() {
 window.onload = function() {
   const savedTheme = localStorage.getItem('theme');
   const icon = document.getElementById('mode-icon');
+  const text = document.getElementById('mode-text');
+
   if (savedTheme === 'dark') {
     document.body.classList.add('dark');
-    icon.textContent = '☀️';
-    icon.textContent = "Light Mode";
+    icon.textContent = '☀️';        // sun icon for dark mode
+    text.textContent = "Light Mode"; // button says "Light Mode"
   } else {
     document.body.classList.remove('dark');
-    icon.textContent = '🌙';
-    icon.textContent = "Dark Mode";
+    icon.textContent = '🌙';        // moon icon for light mode
+    text.textContent = "Dark Mode"; // button says "Dark Mode"
   }
 };
 </script>
