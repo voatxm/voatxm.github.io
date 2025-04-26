@@ -202,7 +202,7 @@
 <nav>
   <a href="https://t.me/Yugen_Bots" class="brand" target="_blank">YUGEN</a>
   <button class="dark-mode-toggle" onclick="toggleDarkMode()">
-    <span id="mode-icon">🌙</span> Dark Mode
+    <span id="mode-icon">🌙</span> <span id="mode-text">Dark Mode</span>
   </button>
 </nav>
 
@@ -253,6 +253,7 @@
       You can download the latest release version from here:
       <br>
       <a href="https://github.com/ArihantSharma/FileStoreBot/releases" class="button">Get the Latest Release</a>
+      <a href="https://voatxm.github.io/yugen/donate/" class="button" style="background-color: #10b981;">Donate</a>
     </p>
   </section>
   <div id="counter" style="text-align: center; margin-top: 20px;">
@@ -307,29 +308,19 @@
 <script>
 function toggleDarkMode() {
   document.body.classList.toggle('dark');
-  
-  const icon = document.getElementById('mode-icon');
+  const modeIcon = document.getElementById('mode-icon');
+  const modeText = document.getElementById('mode-text');
+
   if (document.body.classList.contains('dark')) {
+    modeIcon.textContent = "☀️";
+    modeText.textContent = "Light Mode";
     localStorage.setItem('theme', 'dark');
-    icon.textContent = '☀️'; // Sun icon in Dark Mode
   } else {
+    modeIcon.textContent = "🌙";
+    modeText.textContent = "Dark Mode";
     localStorage.setItem('theme', 'light');
-    icon.textContent = '🌙'; // Moon icon in Light Mode
   }
 }
-
-// When page loads, check saved theme
-window.onload = function() {
-  const savedTheme = localStorage.getItem('theme');
-  const icon = document.getElementById('mode-icon');
-  if (savedTheme === 'dark') {
-    document.body.classList.add('dark');
-    icon.textContent = '☀️';
-  } else {
-    document.body.classList.remove('dark');
-    icon.textContent = '🌙';
-  }
-};
 </script>
 
 </body>
