@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Embodied Carbon Emissions Dashboard</title>
+    <style>
+        body {
+            background: #2B2225;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: #9c7672;
+            margin: 0;
+            padding: 0;
+        }
+        .dashboard {
+            max-width: 1100px;
+            margin: 48px auto;
+            padding: 40px 35px 38px 35px;
+            background: #f7eeee;
+            border-radius: 18px;
+            box-shadow: 0 6px 16px rgba(139, 95, 89, 0.13);
+        }
+        .filters {
+            display: flex;
+            justify-content: start;
+            align-items: center;
+            gap: 44px;
+            margin-bottom: 35px;
+        }
+        .filters > div {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .filter-btn {
+            background: #9c7672;
+            color: #fff;
+            border: none;
+            border-radius: 7px;
+            margin: 0 6px;
+            padding: 7px 19px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.18s;
+        }
+        .filter-btn.active,
+        .filter-btn:hover {
+            background: #744154;
+        }
+        select, .filters label {
+            padding: 7px 12px;
+            border-radius: 7px;
+            border: 1px solid #aaa;
+            background: #f7eeee;
+            color: #744154;
+            font-weight: 500;
+            margin-right: 5px;
+            appearance: none;
+        }
+        .chart-card {
+            padding: 28px 28px 18px 28px;
+            border-radius: 18px;
+            background: #fff7f1;
+        }
+        .chart-header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-end;
+            flex-direction: column;
+            margin-bottom: 8px;
+        }
+        .chart-title {
+            font-size: 26px;
+            color: #744154;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 0;
+            margin-top: 0;
+        }
+        .chart-subtitle {
+            font-size: 18px;
+            color: #a1837d;
+            font-weight: 400;
+            margin-bottom: 14px;
+            margin-top: 2px;
+        }
+        canvas {
+            margin-top: 22px;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="filters">
+            <div>
+                <label>Region:</label>
+                <button class="filter-btn active">ALL</button>
+                <button class="filter-btn">NA</button>
+                <button class="filter-btn">EU</button>
+            </div>
+            <div>
+                <label>Unit:</label>
+                <select>
+                    <option>KgCO2e/m2</option>
+                </select>
+            </div>
+        </div>
+        <div class="chart-card">
+            <div class="chart-header">
+                <h2 class="chart-title">EMBODIED CARBON EMISSIONS</h2>
+                <p class="chart-subtitle">Measured (Initial Value Taken from Type III EPD)</p>
+            </div>
+            <canvas id="carbonChart"></canvas>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('carbonChart').getContext('2d');
+            const data = {
+                labels: [
+                    'Type 1', 'Type 2', 'Type 3', 'Type 4', 'Type 5',
+                    'Type 6', 'Type 7', 'Type 8', 'Type 9', 'Type 10',
+                    'Type 11', 'Type 12', 'Type 13', 'Type 14', 'Type 15'
+                ],
+                datasets: [{
+                    label: 'KgCO2e/m2',
+                    data: [20, 38, 31, 10, 12, 24, 9, 8, 33, 21, 13, 9, 26, 6, 22],
+                    backgroundColor: '#9c7672',
+                    borderRadius: 5,
+                }]
+            };
+
+            const config = {
+                type: 'bar',
+                data: data,
+                options: {
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#744154', font: { size: 13 } }
+                        },
+                        y: {
+                            grid: { color: "#e8cfca" },
+                            ticks: { color: '#744154', font: { size: 13 } }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            };
+
+            new Chart(ctx, config);
+        });
+    </script>
+</body>
+</html>

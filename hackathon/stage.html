@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Showcase - Events & Celebrations</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+            line-height: 1.6;
+            position: relative;
+            font-size: 1.5em; /* Increased base font size further */
+        }
+        .page-section {
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+        }
+        .page-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 2;
+            max-width: 1200px;
+            padding: 2rem;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .page-title {
+            font-size: 8rem;
+            margin: 0 0 1rem 0;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 400% 400%;
+            animation: gradientShift 4s ease infinite;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            line-height: 1.2;
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .page-subtitle {
+            font-size: 4rem;
+            margin: 0 0 2rem 0;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #feca57;
+        }
+        .page-number {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 18rem;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+            z-index: 3;
+            opacity: 0.8;
+        }
+        .page-image {
+            position: absolute;
+            top: 50%;
+            right: 5%;
+            transform: translateY(-50%);
+            width: 40%;
+            height: 60%;
+            background-size: cover;
+            background-position: center;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(255, 107, 107, 0.3);
+            z-index: 1;
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
+            border: 2px solid rgba(78, 205, 196, 0.5);
+        }
+        .page-image:hover {
+            transform: translateY(-50%) scale(1.05);
+            box-shadow: 0 0 50px rgba(78, 205, 196, 0.5);
+            border-color: rgba(78, 205, 196, 1);
+        }
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(10, 10, 10, 0.7));
+            z-index: 1;
+        }
+        .btn {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: #fff;
+            border: none;
+            padding: 2.5rem 5rem;
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-top: 2rem;
+            position: relative;
+            overflow: hidden;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        .btn:hover::before {
+            left: 100%;
+        }
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(78, 205, 196, 0.4);
+        }
+        /* Page 1: Sopra Steria */
+        #page1 {
+            background: linear-gradient(rgba(10,10,10,0.8), rgba(10,10,10,0.8)), url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=1920&h=1080&fit=crop') center/cover;
+        }
+        #page1 .page-image {
+            background-image: url('https://images.unsplash.com/photo-1517457373958-b7bdd4587201?w=600&h=800&fit=crop');
+        }
+        /* Page 2: Grand Hotel Oslo */
+        #page2 {
+            background: linear-gradient(rgba(78,205,196,0.2), rgba(10,10,10,0.8)), url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop') center/cover;
+        }
+        #page2 .page-image {
+            background-image: url('https://images.unsplash.com/photo-1564507592333-cdd2aeaaa8d3?w=600&h=800&fit=crop');
+        }
+        /* Page 3: Grand Hotel Oslo Continued */
+        #page3 {
+            background: linear-gradient(rgba(78,205,196,0.2), rgba(10,10,10,0.8)), url('https://images.unsplash.com/photo-1511690656952-34342bb7c2f2?w=1920&h=1080&fit=crop') center/cover;
+        }
+        #page3 .page-image {
+            background-image: url('https://images.unsplash.com/photo-1516589178581-6cd7833ae3b4?w=600&h=800&fit=crop');
+        }
+        /* Slider Section after pages */
+        .slider-section {
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            align-items: flex-start;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        .slider {
+            max-width: 30%;
+            min-width: 350px;
+            margin: 0;
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(255, 107, 107, 0.2);
+            border: 1px solid rgba(78, 205, 196, 0.3);
+        }
+        .slides {
+            display: flex;
+            transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .slide {
+            min-width: 100%;
+            height: 450px;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 2.5rem; /* Increased font size for slides */
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            position: relative;
+            padding: 1rem; /* Added padding to contain text */
+            box-sizing: border-box; /* Ensure padding doesn't affect size */
+        }
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255,107,107,0.3), rgba(78,205,196,0.3));
+            opacity: 0;
+            transition: opacity 0.3s;
+            transform: scale(0);
+            transform-origin: center;
+        }
+        .slide:hover::before {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .slider-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border: none;
+            color: #fff;
+            font-size: 4rem; /* Increased font size for navigation */
+            padding: 2rem;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
+            border-radius: 50%;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(255, 107, 107, 0.3);
+        }
+        .slider-nav:hover {
+            background: linear-gradient(45deg, #4ecdc4, #ff6b6b);
+            transform: translateY(-50%) scale(1.2);
+            box-shadow: 0 5px 15px rgba(78, 205, 196, 0.4);
+        }
+        .prev { left: 10px; }
+        .next { right: 10px; }
+        .dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        .dot {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #666;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+        }
+        .dot::after {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            width: 36px;
+            height: 36px;
+            border: 1px solid transparent;
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .dot:hover::after {
+            opacity: 1;
+            border-color: #ff6b6b;
+        }
+        .dot.active {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            transform: scale(1.3);
+            box-shadow: 0 0 10px rgba(255,107,107,0.5);
+        }
+        .slider-title {
+            font-size: 6.5rem; /* Increased font size for slider title */
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            width: 100%;
+        }
+        /* Enhanced Animations */
+        [data-aos] {
+            transition-duration: 1.2s;
+            transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .page-number {
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { opacity: 0.8; transform: scale(1) translateX(0); }
+            50% { opacity: 1; transform: scale(1.1) translateX(10px); }
+        }
+        .page-title {
+            animation: neon 2s ease-in-out infinite alternate;
+        }
+        @keyframes neon {
+            from { 
+                text-shadow: 0 0 5px rgba(255,107,107,0.8), 0 0 10px rgba(78,205,196,0.8), 0 0 15px rgba(255,107,107,0.8);
+                transform: skewX(0deg);
+            }
+            to { 
+                text-shadow: 0 0 10px rgba(78,205,196,0.8), 0 0 20px rgba(255,107,107,0.8), 0 0 30px rgba(78,205,196,0.8);
+                transform: skewX(2deg);
+            }
+        }
+        /* Floating particles for attractiveness */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float 6s infinite linear;
+        }
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg) scale(0); opacity: 0; }
+            10% { opacity: 0.6; transform: scale(1); }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-100px) rotate(360deg) scale(0); opacity: 0; }
+        }
+        .content-reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+        .content-reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* Responsive Design - Adjusted for better font sizes in VS Code preview */
+        @media (max-width: 768px) {
+            .page-section {
+                height: auto;
+                min-height: 100vh;
+                flex-direction: column;
+                padding: 1rem;
+            }
+            .page-content {
+                padding: 1rem;
+                order: 2;
+                margin-top: 2rem;
+            }
+            .page-title {
+                font-size: 5.5rem;
+            }
+            .page-subtitle {
+                font-size: 3rem;
+            }
+            .page-number {
+                font-size: 12rem;
+                top: 10px;
+                right: 10px;
+            }
+            .page-image {
+                position: relative;
+                width: 100%;
+                height: 300px;
+                right: auto;
+                top: auto;
+                transform: none;
+                order: 1;
+                margin-bottom: 1rem;
+            }
+            .slider-section {
+                flex-direction: column;
+                align-items: center;
+            }
+            .slider {
+                max-width: 100%;
+                min-width: auto;
+                width: 100%;
+            }
+            .slide {
+                height: 250px;
+                font-size: 2rem;
+            }
+            .slider-title {
+                font-size: 5rem;
+            }
+            .slider-nav {
+                padding: 1.5rem;
+                font-size: 3.5rem;
+            }
+            .particles .particle {
+                width: 2px;
+                height: 2px;
+            }
+            .btn {
+                padding: 2rem 4rem;
+                font-size: 2rem;
+            }
+        }
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 4rem;
+            }
+            .page-subtitle {
+                font-size: 2.5rem;
+            }
+            .btn {
+                padding: 1.8rem 3.5rem;
+                font-size: 1.8rem;
+            }
+            .slide {
+                font-size: 1.8rem;
+            }
+            .slider-title {
+                font-size: 4.5rem;
+            }
+        }
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Page 1: Sopra Steria -->
+    <section id="page1" class="page-section" data-aos="fade-right">
+        <div class="overlay"></div>
+        <div class="particles" id="particles1"></div>
+        <div class="page-content">
+            <h1 class="page-title">SWITCH - SOPRA STERIA KICK OFF 2025</h1>
+            <p class="page-subtitle">Join us for an electrifying start to the year ahead</p>
+            <button class="btn">Learn More</button>
+        </div>
+        <div class="page-number">1</div>
+        <div class="page-image"></div>
+        <!-- Additional rectangular photo box -->
+        <div style="position: absolute; top: 10%; left: 5%; width: 20%; height: 30%; background-image: url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400&h=300&fit=crop'); background-size: cover; border: 2px solid #4ecdc4; border-radius: 10px; box-shadow: 0 0 15px rgba(78, 205, 196, 0.5);"></div>
+    </section>
+
+    <!-- Page 2: Grand Hotel Oslo -->
+    <section id="page2" class="page-section" data-aos="fade-left">
+        <div class="overlay"></div>
+        <div class="particles" id="particles2"></div>
+        <div class="page-content">
+            <h1 class="page-title">GRAND HOTEL</h1>
+            <p class="page-subtitle">OSLO 150 YEARS</p>
+            <button class="btn">Explore Event</button>
+        </div>
+        <div class="page-number">2</div>
+        <div class="page-image"></div>
+        <!-- Additional rectangular photo box -->
+        <div style="position: absolute; top: 10%; left: 5%; width: 20%; height: 30%; background-image: url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=400&h=300&fit=crop'); background-size: cover; border: 2px solid #4ecdc4; border-radius: 10px; box-shadow: 0 0 15px rgba(78, 205, 196, 0.5);"></div>
+    </section>
+
+    <!-- Page 3: Grand Hotel Oslo Continued -->
+    <section id="page3" class="page-section" data-aos="fade-up">
+        <div class="overlay"></div>
+        <div class="particles" id="particles3"></div>
+        <div class="page-content">
+            <h1 class="page-title">GRAND HOTEL</h1>
+            <p class="page-subtitle">OSLO 150 YEARS</p>
+            <button class="btn">Discover Legacy</button>
+        </div>
+        <div class="page-number">3</div>
+        <div class="page-image"></div>
+        <!-- Additional rectangular photo box -->
+        <div style="position: absolute; top: 10%; left: 5%; width: 20%; height: 30%; background-image: url('https://images.unsplash.com/photo-1518791841217-8f162f1e1131?w=400&h=300&fit=crop'); background-size: cover; border: 2px solid #4ecdc4; border-radius: 10px; box-shadow: 0 0 15px rgba(78, 205, 196, 0.5);"></div>
+    </section>
+
+    <!-- Enhanced Slider Section -->
+    <section class="slider-section" data-aos="fade-up">
+        <h2 class="slider-title content-reveal" data-aos="flip-left">Featured Highlights Across Events</h2>
+        
+        <div class="slider content-reveal" data-aos="flip-right" data-aos-delay="100">
+            <div class="slides">
+                <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=400&fit=crop');">
+                    Cutting-Edge Tech Demos at Sopra Steria
+                </div>
+                <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=800&h=400&fit=crop');">
+                    Team Building Sessions at Grand Hotel
+                </div>
+                <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=400&fit=crop');">
+                    Future Visions Keynote in Oslo
+                </div>
+            </div>
+            <button class="slider-nav prev">&lt;</button>
+            <button class="slider-nav next">&gt;</button>
+            <div class="dots">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+        </div>
+
+        <div class="slider content-reveal" data-aos="flip-left" data-aos-delay="200">
+            <div class="slides">
+                <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1517457373958-b7bdd4587201?w=800&h=400&fit=crop');">
+                    Networking Mixer with Industry Leaders
+                </div>
+                <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=400&fit=crop');">
+                    Interactive Workshops on Innovation
+                </div>
+                <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1511690656952-34342bb7c2f2?w=800&h=400&fit=crop');">
+                    Closing Celebration with Awards
+                </div>
+            </div>
+            <button class="slider-nav prev">&lt;</button>
+            <button class="slider-nav next">&gt;</button>
+            <div class="dots">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+        </div>
+
+        <div class="slider content-reveal" data-aos="flip-right" data-aos-delay="300">
+            <div class="slides">
+                <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&h=400&fit=crop');">
+                    Strategic Planning for 2025
+                </div>
+                <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=800&h=400&fit=crop');">
+                    Growth Opportunities in Technology
+                </div>
+                <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1516589178581-6cd7833ae3b4?w=800&h=400&fit=crop');">
+                    Success Stories and Legacy Events
+                </div>
+            </div>
+            <button class="slider-nav prev">&lt;</button>
+            <button class="slider-nav next">&gt;</button>
+            <div class="dots">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 120,
+            easing: 'ease-in-out'
+        });
+
+        // Create floating particles with varied speeds
+        function createParticles(containerId, count = 30) {
+            const container = document.getElementById(containerId);
+            for (let i = 0; i < count; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+                particle.style.width = (Math.random() * 6 + 2) + 'px';
+                particle.style.height = particle.style.width;
+                container.appendChild(particle);
+            }
+        }
+        createParticles('particles1');
+        createParticles('particles2');
+        createParticles('particles3');
+
+        // Updated Slider functionality with random slide delays
+        document.querySelectorAll('.slider').forEach((slider, sliderIndex) => {
+            const slides = slider.querySelector('.slides');
+            const dots = slider.querySelectorAll('.dot');
+            const prev = slider.querySelector('.prev');
+            const next = slider.querySelector('.next');
+            let currentIndex = 0;
+            let autoSlideInterval;
+            let isPaused = false;
+            const slideDelays = [3000, 4000, 5000]; // Varied delays
+
+            function showSlide(index) {
+                slides.style.transform = `translateX(-${index * 100}%)`;
+                dots.forEach(dot => dot.classList.remove('active'));
+                dots[index].classList.add('active');
+                resetAutoSlide();
+            }
+
+            function nextSlide() {
+                if (!isPaused) {
+                    currentIndex = (currentIndex + 1) % 3;
+                    showSlide(currentIndex);
+                }
+            }
+
+            function prevSlide() {
+                currentIndex = (currentIndex - 1 + 3) % 3;
+                showSlide(currentIndex);
+            }
+
+            function resetAutoSlide() {
+                clearInterval(autoSlideInterval);
+                if (!isPaused) {
+                    const delay = slideDelays[Math.floor(Math.random() * slideDelays.length)];
+                    autoSlideInterval = setInterval(nextSlide, delay);
+                }
+            }
+
+            // Mouse events for pause/resume
+            slider.addEventListener('mouseenter', () => {
+                isPaused = true;
+                clearInterval(autoSlideInterval);
+            });
+            slider.addEventListener('mouseleave', () => {
+                isPaused = false;
+                resetAutoSlide();
+            });
+
+            prev.addEventListener('click', prevSlide);
+            next.addEventListener('click', nextSlide);
+
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    currentIndex = index;
+                    showSlide(currentIndex);
+                });
+            });
+
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') prevSlide();
+                if (e.key === 'ArrowRight') nextSlide();
+            });
+
+            // Touch/swipe support for mobile
+            let startX = 0;
+            let endX = 0;
+            slider.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
+            });
+            slider.addEventListener('touchend', (e) => {
+                endX = e.changedTouches[0].clientX;
+                if (startX - endX > 50) nextSlide();
+                if (endX - startX > 50) prevSlide();
+            });
+
+            resetAutoSlide();
+        });
+
+        // Reveal content on scroll with staggered delays
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px 0px -100px 0px'
+        };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('revealed');
+                    }, index * 200);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.content-reveal').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Updated Scroll Effect: Subtle fade and scale instead of heavy parallax
+        let ticking = false;
+        function updateScrollEffect() {
+            const scrolled = window.pageYOffset;
+            const sections = document.querySelectorAll('.page-section');
+            sections.forEach((section, index) => {
+                const progress = scrolled / (sections.length * window.innerHeight);
+                const offset = Math.min(progress * 100, 100);
+                section.style.opacity = 1 - (offset / 100 * 0.3); // Subtle fade
+                section.style.transform = `scale(${1 + (offset / 100 * 0.05)})`; // Light scale
+            });
+            ticking = false;
+        }
+
+        function requestTick() {
+            if (!ticking) {
+                requestAnimationFrame(updateScrollEffect);
+                ticking = true;
+            }
+        }
+
+        window.addEventListener('scroll', requestTick);
+
+        // Button ripple effect with color change
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                btn.style.background = 'linear-gradient(45deg, #ffffff, #4ecdc4)';
+                setTimeout(() => {
+                    btn.style.background = 'linear-gradient(45deg, #ff6b6b, #4ecdc4)';
+                }, 300);
+                const ripple = document.createElement('span');
+                const rect = btn.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                ripple.style.cssText = `
+                    position: absolute;
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${x}px;
+                    top: ${y}px;
+                    background: rgba(255,255,255,0.5);
+                    border-radius: 50%;
+                    transform: scale(0);
+                    animation: ripple 0.6s linear;
+                    pointer-events: none;
+                `;
+                btn.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+
+        // Smooth scroll navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Enhanced Confetti with more particles and rotation
+        function confetti() {
+            const confettiCount = 150;
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57'];
+            for (let i = 0; i < confettiCount; i++) {
+                const confettiPiece = document.createElement('div');
+                confettiPiece.style.cssText = `
+                    position: fixed;
+                    left: ${Math.random() * 100}vw;
+                    top: -10px;
+                    width: ${Math.random() * 10 + 5}px;
+                    height: ${Math.random() * 10 + 5}px;
+                    background: ${colors[Math.floor(Math.random() * colors.length)]};
+                    pointer-events: none;
+                    z-index: 1000;
+                    animation: confetti-fall ${Math.random() * 4 + 2}s linear forwards;
+                `;
+                document.body.appendChild(confettiPiece);
+                setTimeout(() => confettiPiece.remove(), 6000);
+            }
+        }
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', confetti);
+        });
+
+        // New Feature: Back to top button on scroll
+        const backToTopBtn = document.createElement('button');
+        backToTopBtn.innerHTML = '↑';
+        backToTopBtn.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 100;
+        `;
+        document.body.appendChild(backToTopBtn);
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopBtn.style.opacity = '1';
+            } else {
+                backToTopBtn.style.opacity = '0';
+            }
+        });
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>+

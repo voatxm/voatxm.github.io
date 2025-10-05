@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Non-Responsive Reporting Dashboard</title>
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', Arial, sans-serif;
+      background: linear-gradient(180deg, #1778b1 0%, #062a49 90%);
+      color: #fff;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+
+    .rating-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 38px;
+      font-size: 100px;
+      padding: 18px 0 10px 0;
+      opacity: 0.95;
+      text-align: center;
+    }
+
+    .rating-star {
+      margin-right: 5px;
+      color: #fffde3;
+    }
+
+    .hero {
+      width: 100vw;
+      min-height: 55vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+      margin-top: 30px;
+      padding: 0 8vw;
+    }
+
+    .hero-title {
+      font-size: 300px;
+      font-weight: 900;
+      line-height: 1.13;
+      margin: 0 0 22px 0;
+      letter-spacing: 0;
+      color: #fff;
+      text-shadow: 0 4px 24px #0c243f77;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.4em;
+      word-break: break-word;
+    }
+
+    .hero-keyword {
+      position: relative;
+      cursor: pointer;
+      color: #fff;
+      transition: color 0.16s;
+      font-weight: 900;
+      z-index: 10;
+      display: inline-block;
+      word-break: break-all;
+    }
+
+    .hero-keyword:hover {
+      color: #55f3ff;
+    }
+
+    .hero-keyword .feature-card {
+      display: none;
+      position: absolute;
+      left: 50%;
+      bottom: 110%;
+      transform: translate(-50%, 0) scale(1);
+      min-width: 180px;
+      max-width: 320px;
+      background: #1c395add;
+      color: #f3faff;
+      border-radius: 12px;
+      padding: 15px 16px;
+      font-size: 1.8rem;
+      font-family: 'Inter', Arial, sans-serif;
+      box-shadow: 0 6px 34px #068acc50;
+      z-index: 110;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s, transform 0.2s;
+      line-height: 1.43;
+      white-space: normal;
+      word-break: break-word;
+    }
+
+    .hero-keyword:hover .feature-card {
+      display: block;
+      animation: popup-fade 0.21s;
+      opacity: 1;
+      pointer-events: auto;
+      transform: translate(-50%, -6px) scale(1.04);
+    }
+
+    @keyframes popup-fade {
+      from {
+        opacity: 0;
+        transform: translate(-50%, 18px) scale(0.97);
+      }
+
+      to {
+        opacity: 1;
+        transform: translate(-50%, -6px) scale(1.04);
+      }
+    }
+
+    .hero-badge {
+      font-weight: 700;
+      font-size: 100px;
+      color: #fff2e0;
+      margin-bottom: 24px;
+      background: transparent;
+      display: inline-block;
+      padding: 0.28em 1em 0.28em 0.75em;
+      border-radius: 8px;
+    }
+
+    .cta-row {
+      margin-top: 18px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: center;
+      gap: 13px;
+      align-items: center;
+    }
+
+    .cta-btn {
+      position: relative;
+      font-size: 100px;
+      padding: 13px 34px;
+      background: linear-gradient(90deg, #a0eaff 0%, #dbeafe 100%);
+      color: #036;
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      overflow: hidden;
+      box-shadow: 0 4px 22px #3bb0f644;
+      transition: background 0.12s, color 0.12s;
+      z-index: 0;
+      animation: pulse-btn 1.4s infinite cubic-bezier(.66, 0, .34, 1);
+    }
+
+    @keyframes pulse-btn {
+      0% {
+        box-shadow: 0 0 0 0 #a0effd77, 0 4px 20px #3bb0f655;
+      }
+
+      70% {
+        box-shadow: 0 0 0 16px #2fd3fa00, 0 4px 20px #3bb0f655;
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 #a0effd77, 0 4px 20px #3bb0f655;
+      }
+    }
+
+    .cta-btn::after {
+      content: '';
+      position: absolute;
+      left: -60%;
+      top: 0;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(112deg,
+          rgba(255, 255, 255, 0.25) 0%,
+          rgba(255, 255, 255, 0.82) 25%,
+          rgba(255, 255, 255, 0.3) 49%,
+          rgba(255, 255, 255, 0) 100%);
+      transform: skewX(-28deg);
+      animation: shimmer-btn 2.1s infinite linear;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    @keyframes shimmer-btn {
+      0% {
+        left: -60%;
+      }
+
+      100% {
+        left: 110%;
+      }
+    }
+
+    .see-demo-link {
+      margin-top: 10px;
+      font-size: 100px;
+      color: #e0f4ff;
+      text-decoration: underline;
+      opacity: .87;
+      letter-spacing: 0.01em;
+      transition: color 0.11s;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .see-demo-link:hover {
+      color: #f9f9ff;
+    }
+
+    .feature-btns {
+      width: 100vw;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 50px;
+      /* Increased gap between buttons */
+      margin: 100px auto 0 auto;
+      /* Increased margin from bottom */
+    }
+
+    .feature-btn {
+      position: relative;
+      min-width: 180px;
+      padding: 24px 40px;
+      font-size: 100px;
+      font-family: 'Inter', Arial, sans-serif;
+      font-weight: 900;
+      color: #053755;
+      background: linear-gradient(93deg, #6eedf3 0%, #a9fff1 100%);
+      border: none;
+      border-radius: 18px;
+      outline: none;
+      cursor: pointer;
+      box-shadow: 0 4px 14px #4be3ee90, 0 0 20px #4be3ee40;
+      /* Added glowing effect */
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
+      z-index: 1;
+      animation: glowing-pulse 2.5s infinite alternate;
+    }
+
+    @keyframes glowing-pulse {
+      0% {
+        box-shadow: 0 4px 14px #4be3ee90, 0 0 10px #4be3ee40;
+        transform: scale(1);
+      }
+
+      50% {
+        box-shadow: 0 8px 28px #4be3ee90, 0 0 30px #4be3ee80;
+        transform: scale(1.03);
+      }
+
+      100% {
+        box-shadow: 0 4px 14px #4be3ee90, 0 0 20px #4be3ee40;
+        transform: scale(1);
+      }
+    }
+
+    .feature-btn:hover,
+    .feature-btn:focus {
+      transform: scale(1.12) translateY(-5px);
+      box-shadow: 0 10px 35px #38ddefc2, 0 0 40px #03abcb80;
+      background: linear-gradient(97deg, #21caff 0%, #6fe6b5 90%);
+      color: #022026;
+      z-index: 2;
+    }
+
+    .feature-btn::after {
+      content: '';
+      pointer-events: none;
+      position: absolute;
+      left: -40%;
+      top: 0;
+      width: 40%;
+      height: 100%;
+      background: linear-gradient(115deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.2));
+      transform: skewX(-24deg);
+      animation: shimmer-glow 2.6s infinite linear;
+      z-index: 3;
+    }
+
+    @keyframes shimmer-glow {
+      0% {
+        left: -40%;
+      }
+
+      100% {
+        left: 140%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="rating-bar">
+    <span><span class="rating-star">&#9733;</span> 4.8 rating on <b>Capterra</b></span>
+    <span><span class="rating-star">&#9733;</span> 4.8 rating on <b>G2</b></span>
+    <span>★ 350+ reviews on <b>Xero</b></span>
+    <span>★ 550+ reviews on <b>Intuit Quickbooks</b></span>
+  </div>
+  <div class="hero">
+    <div class="hero-title">
+      Create
+      <span class="hero-keyword">
+        reports
+        <span class="feature-card">Beautiful, exportable reports with customizable charts and data tables.</span>
+      </span>,
+      <span class="hero-keyword">
+        forecasts
+        <span class="feature-card">Predict trends and outcomes with advanced AI-powered forecasting tools.</span>
+      </span>,
+      <span class="hero-keyword">
+        dashboards
+        <span class="feature-card">Interactive dashboards to monitor your most important KPIs in real-time.</span>
+      </span>
+      &amp;
+      <span class="hero-keyword">
+        consolidations
+        <span class="feature-card">Aggregate data seamlessly from multiple sources or business entities.</span>
+      </span>
+    </div>
+    <div class="hero-badge">✨ Now with AI-insights</div>
+    <div class="cta-row">
+      <button class="cta-btn">Start 14-day free trial &gt;</button>
+    </div>
+    <a href="#" class="see-demo-link">&#128196; See what we do</a>
+  </div>
+  <div class="feature-btns">
+    <button class="feature-btn">Reports</button>
+    <button class="feature-btn">Forecasts</button>
+    <button class="feature-btn">Dashboards</button>
+    <button class="feature-btn">Consolidations</button>
+  </div>
+
+  <script>
+    // Updated JavaScript to enhance interactivity
+    document.addEventListener('DOMContentLoaded', () => {
+      // Add click event to CTA button for alert
+      const ctaBtn = document.querySelector('.cta-btn');
+      ctaBtn.addEventListener('click', () => {
+        alert('Starting your 14-day free trial! Redirecting to signup page...');
+        // Here you would typically redirect to a signup page
+        // window.location.href = 'signup.html';
+      });
+
+      // Add hover effect for feature buttons with dynamic feedback
+      const featureButtons = document.querySelectorAll('.feature-btn');
+      featureButtons.forEach(btn => {
+        btn.addEventListener('mouseover', () => {
+          btn.style.background = 'linear-gradient(97deg, #21caff 0%, #6fe6b5 90%)';
+          btn.style.color = '#022026';
+          btn.style.boxShadow = '0 10px 35px #38ddefc2, 0 0 40px #03abcb80';
+        });
+        btn.addEventListener('mouseout', () => {
+          btn.style.background = 'linear-gradient(93deg, #6eedf3 0%, #a9fff1 100%)';
+          btn.style.color = '#053755';
+          btn.style.boxShadow = '0 4px 14px #4be3ee90, 0 0 20px #4be3ee40';
+        });
+        btn.addEventListener('click', () => {
+          alert(`Exploring ${btn.textContent.toLowerCase()} feature!`);
+          // Here you would typically navigate to a feature-specific page
+          // window.location.href = `${btn.textContent.toLowerCase()}.html`;
+        });
+      });
+
+      // Dynamic time update
+      function updateTime() {
+        const now = new Date();
+        const options = {
+          timeZone: 'Asia/Kolkata',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true
+        };
+        const timeString = now.toLocaleTimeString('en-US', options);
+        console.log(`Current time: ${timeString} IST`);
+      }
+      setInterval(updateTime, 1000); // Update every second
+
+      // Add keyboard accessibility for buttons
+      document.querySelectorAll('button, a').forEach(element => {
+        element.setAttribute('tabindex', '0');
+        element.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            element.click();
+          }
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>

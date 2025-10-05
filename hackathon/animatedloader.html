@@ -1,0 +1,281 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Animated Loader — Demo</title>
+  <style>
+    /* ----------------------------
+       Reset & utilities
+       ---------------------------- */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body,#app{height:100%}
+    body{font-family:Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; background:#0f172a; color:#e6eef8;-webkit-font-smoothing:antialiased;}/* ----------------------------
+   Full-screen loader layout
+   ---------------------------- */
+.loader-wrap{position:fixed;inset:0;display:grid;place-items:center;padding:2rem;background:linear-gradient(180deg,#071233 0%, rgba(7,18,51,.6) 60%);z-index:9999;overflow:hidden}
+
+/* soft animated starfield / particles */
+.stars{position:absolute;inset:0;pointer-events:none;opacity:.5}
+.star{position:absolute;background:radial-gradient(circle, #fff 0%, rgba(255,255,255,0) 60%);width:2px;height:2px;border-radius:50%;filter:blur(.6px);animation:twinkle 3s infinite ease-in-out}
+@keyframes twinkle{0%,100%{opacity:.1;transform:scale(.8)}50%{opacity:1;transform:scale(1.4)}}
+
+/* animated floating blobs */
+.blob{position:absolute;border-radius:50%;filter:blur(40px);opacity:.35;mix-blend-mode:screen;animation:float 8s ease-in-out infinite}
+.blob.blob1{width:420px;height:420px;left:-8%;top:-10%;background:linear-gradient(135deg,#7c3aed,#06b6d4);animation-duration:12s}
+.blob.blob2{width:300px;height:300px;right:-6%;bottom:-8%;background:linear-gradient(135deg,#ef4444,#f59e0b);animation-duration:10s}
+@keyframes float{0%{transform:translateY(0) rotate(0)}50%{transform:translateY(-30px) rotate(18deg)}100%{transform:translateY(0) rotate(0)}}
+
+/* main central card */
+.card{position:relative;z-index:20;width:min(980px,94%);max-width:980px;padding:36px;border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01));box-shadow:0 10px 40px rgba(2,6,23,0.6);backdrop-filter: blur(8px);display:flex;gap:24px;align-items:center}
+.left{width:180px;display:flex;flex-direction:column;align-items:center;gap:18px}
+
+/* logo circle with ripple reveal */
+.logo-circle{width:128px;height:128px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#0ea5e9,#7c3aed);box-shadow:0 8px 30px rgba(124,58,237,0.25);transform:scale(.85);animation:logoIn 1100ms cubic-bezier(.2,.9,.3,1) forwards}
+@keyframes logoIn{0%{transform:scale(.3) rotate(-40deg) translateY(20px);opacity:0}60%{transform:scale(1.05) rotate(12deg) translateY(-4px);opacity:1}100%{transform:scale(1) rotate(0) translateY(0)}}
+.logo-svg{width:72px;height:72px}
+
+/* ripple circle */
+.ripple{position:absolute;border-radius:50%;width:180px;height:180px;left:calc(50% - 90px);top:calc(50% - 90px);filter:blur(16px);opacity:.12;background:radial-gradient(circle, rgba(255,255,255,0.12), rgba(255,255,255,0));animation:rippleAnim 2.8s infinite}
+@keyframes rippleAnim{0%{transform:scale(.9);opacity:.13}60%{transform:scale(1.12);opacity:.06}100%{transform:scale(.9);opacity:.13}}
+
+/* textual area */
+.title{font-size:22px;font-weight:700;letter-spacing:-0.2px}
+.subtitle{font-size:14px;opacity:.75}
+
+/* loading bar + percent */
+.progress-wrap{width:100%;display:flex;flex-direction:column;gap:10px}
+.bar{height:12px;border-radius:999px;background:linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));overflow:hidden}
+.bar > .fill{height:100%;width:0%;background:linear-gradient(90deg,#06b6d4,#7c3aed);border-radius:999px;box-shadow:0 6px 18px rgba(12,74,110,0.18);transition:width 300ms linear}
+.percent{font-weight:700;font-size:14px;letter-spacing:0.2px;text-align:right}
+
+/* animated small elements (floating icons) */
+.icons{display:flex;gap:12px;align-items:center}
+.icon{width:44px;height:44px;border-radius:10px;background:rgba(255,255,255,0.03);display:grid;place-items:center;backdrop-filter: blur(4px);transform:translateY(0);animation:iconFloat 3.5s ease-in-out infinite}
+.icon:nth-child(2){animation-delay:.25s}
+.icon:nth-child(3){animation-delay:.4s}
+@keyframes iconFloat{0%{transform:translateY(0)}50%{transform:translateY(-8px)}100%{transform:translateY(0)}}
+
+/* subtle entrance for content */
+.meta{margin-top:6px;opacity:0;transform:translateY(8px);animation:metaIn 700ms 900ms forwards}
+@keyframes metaIn{to{opacity:1;transform:none}}
+
+/* main site hidden until loaded */
+#site{opacity:0;pointer-events:none;transition:opacity .6s ease}
+#site.visible{opacity:1;pointer-events:auto}
+
+/* footer small controls */
+.controls{display:flex;gap:10px;align-items:center}
+.btn{padding:8px 12px;border-radius:8px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.04);cursor:pointer;font-weight:600}
+.btn:active{transform:translateY(1px)}
+
+/* responsive tweaks */
+@media (max-width:700px){
+  .card{flex-direction:column;align-items:center;padding:20px}
+  .left{width:100%;flex-direction:row;justify-content:center}
+  .title{font-size:18px;text-align:center}
+  .meta{display:none}
+}
+
+  </style>
+</head>
+<body>
+  <div id="app"><!-- Loader overlay -->
+<div class="loader-wrap" id="loader">
+  <div class="stars" aria-hidden>
+    <!-- generate a few stars with JS for randomness -->
+  </div>
+
+  <div class="blob blob1" aria-hidden></div>
+  <div class="blob blob2" aria-hidden></div>
+
+  <div class="card" role="status" aria-live="polite">
+    <div class="left">
+      <div style="position:relative">
+        <div class="logo-circle" aria-hidden>
+          <!-- simple SVG logo -->
+          <svg class="logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" fill="none">
+            <defs>
+              <linearGradient id="g1" x1="0" x2="1">
+                <stop offset="0" stop-color="#06b6d4"/>
+                <stop offset="1" stop-color="#7c3aed"/>
+              </linearGradient>
+            </defs>
+            <circle cx="50" cy="50" r="30" fill="url(#g1)"/>
+            <path d="M35 60 L50 38 L65 60 Z" fill="#fff" opacity="0.92"/>
+          </svg>
+        </div>
+        <div class="ripple" aria-hidden></div>
+      </div>
+
+      <div class="icons" aria-hidden>
+        <div class="icon">⚡</div>
+        <div class="icon">✨</div>
+        <div class="icon">🔋</div>
+      </div>
+    </div>
+
+    <div style="flex:1">
+      <div class="title">Loading — Modern UI Experience</div>
+      <div class="subtitle">Preparing animations, assets & secure connections...</div>
+
+      <div class="progress-wrap" style="margin-top:18px">
+        <div class="bar" aria-hidden>
+          <div class="fill" id="progressFill"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div class="meta">Almost there — animating components</div>
+          <div class="percent" id="percentText">0%</div>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:18px">
+        <div class="controls">
+          <button class="btn" id="skipBtn">Skip</button>
+          <button class="btn" id="replayBtn">Replay</button>
+        </div>
+        <div style="font-size:12px;opacity:.7">Tip: press <kbd>Space</kbd> to skip</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Main site content (hidden initially) -->
+<main id="site">
+  <header style="padding:28px 36px;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(90deg,#071233,#08122b);">
+    <div style="display:flex;gap:12px;align-items:center">
+      <div style="width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#06b6d4,#7c3aed);display:grid;place-items:center;color:#061423;font-weight:800">AJ</div>
+      <div>
+        <div style="font-weight:800">Animated Site</div>
+        <div style="font-size:13px;opacity:.7">A tiny demo to show the loader transition</div>
+      </div>
+    </div>
+    <nav style="display:flex;gap:12px;align-items:center">
+      <a href="#" style="opacity:.9">Home</a>
+      <a href="#" style="opacity:.8">Features</a>
+      <a href="#" style="opacity:.8">Contact</a>
+    </nav>
+  </header>
+
+  <section style="padding:48px;min-height:60vh;display:grid;place-items:center;gap:18px">
+    <h1 style="font-size:36px;">Welcome — the site is ready ✨</h1>
+    <p style="max-width:780px;text-align:center;opacity:.9;line-height:1.6">This demo contains a pixel-perfect loader with animated blobs, starfield, logo reveal, progress bar with percentage, icon floats and a gentle transition into the main website. Replace the assets and tweak timings as needed to match your video exactly.</p>
+
+    <div style="display:flex;gap:12px">
+      <button class="btn" onclick="replayLoader()">Show Loader Again</button>
+    </div>
+  </section>
+
+  <footer style="padding:24px;border-top:1px solid rgba(255,255,255,0.02);text-align:center">Made with ❤ — Demo</footer>
+</main>
+
+  </div>  <script>
+    /* ----------------------------
+       Small helper to create randomized stars
+       ---------------------------- */
+    const starsWrap = document.querySelector('.stars');
+    for(let i=0;i<60;i++){
+      const s = document.createElement('div');
+      s.className='star';
+      const x = Math.random()*100;
+      const y = Math.random()*100;
+      const size = Math.random()*3+1;
+      s.style.left = x+'%';
+      s.style.top = y+'%';
+      s.style.width = size+'px';
+      s.style.height = size+'px';
+      s.style.animationDuration = (2+Math.random()*4)+'s';
+      s.style.opacity = (0.2+Math.random()*0.9).toString();
+      starsWrap.appendChild(s);
+    }
+
+    /* ----------------------------
+       Mock loading sequence — replace with real asset-loading hooks
+       ---------------------------- */
+    const fill = document.getElementById('progressFill');
+    const percentText = document.getElementById('percentText');
+    const loader = document.getElementById('loader');
+    const site = document.getElementById('site');
+    const skipBtn = document.getElementById('skipBtn');
+    const replayBtn = document.getElementById('replayBtn');
+
+    let percent = 0;
+    let interval;
+
+    function startFakeLoad(){
+      // reset
+      percent = 0;
+      fill.style.width = '0%';
+      percentText.textContent = '0%';
+
+      // small initial jump then slower progress
+      clearInterval(interval);
+      interval = setInterval(()=>{
+        // progress logic: small steps + occasional larger boosts
+        const step = Math.random()*2.6 + 0.6 + Math.abs(Math.sin(percent/12))*2;
+        percent = Math.min(100, percent + step);
+        fill.style.width = percent+'%';
+        percentText.textContent = Math.floor(percent)+'%';
+
+        if(percent>=100){
+          clearInterval(interval);
+          // a short post-load animation and reveal
+          setTimeout(()=>{
+            revealSite();
+          },520);
+        }
+      },120);
+    }
+
+    function revealSite(){
+      // animate loader out
+      loader.style.opacity = '0';
+      loader.style.transform = 'translateY(-6px)';
+      setTimeout(()=>{
+        loader.style.display = 'none';
+        site.classList.add('visible');
+      },600);
+    }
+
+    // Skip & replay controls
+    skipBtn.addEventListener('click',()=>{
+      clearInterval(interval);
+      fill.style.width='100%';
+      percentText.textContent='100%';
+      revealSite();
+    });
+
+    replayBtn.addEventListener('click',()=>{
+      // bring loader back
+      site.classList.remove('visible');
+      loader.style.display = 'grid';
+      loader.style.opacity = '1';
+      loader.style.transform = 'none';
+      startFakeLoad();
+    });
+
+    // allow keyboard space to skip
+    window.addEventListener('keydown',(e)=>{
+      if(e.code === 'Space'){
+        e.preventDefault();
+        skipBtn.click();
+      }
+    });
+
+    /* small function exposed to page to replay loader */
+    function replayLoader(){
+      replayBtn.click();
+    }
+
+    // Start on load
+    window.addEventListener('load',()=>{
+      startFakeLoad();
+    });
+
+    // expose to global so demo button can call it
+    window.replayLoader = replayLoader;
+  </script></body>
+  <script src="ripple.js"></script>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Unparalleled BSS/OSS Capabilities</title>
+  <style>
+    body {
+      background: #92a4aa;
+      font-family: 'Inter', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .subtitle {
+      color: #b6c7cc;
+      font-family: 'Fira Mono', 'Courier New', monospace;
+      font-size: 1rem;
+      letter-spacing: .1em;
+      text-align: center;
+      margin-top: 40px;
+    }
+    .header {
+      text-align: center;
+      margin-top: 20px;
+      color: #fff;
+    }
+    .header h1 {
+      font-size: 4rem;
+      margin: 0;
+      font-weight: 800;
+      color: #e6f0f2;
+    }
+    .header h2 {
+      font-size: 3rem;
+      margin: 0;
+      font-weight: 900;
+      color: #23272a;
+    }
+    .tabs-container {
+      display: flex;
+      justify-content: center;
+      margin: 40px 0 0 0;
+      gap: 20px;
+    }
+    .tab {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 34px;
+      font-family: 'Fira Mono', monospace;
+      font-size: 1.2rem;
+      border-radius: 18px;
+      background: #92a4aa;
+      color: #23272a;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      box-shadow: none;
+    }
+    .tab.active, .tab:focus {
+      font-weight: bold;
+      color: #23272a;
+    }
+    .tab.billing.active   { background: #f9d8dd; }
+    .tab.charging.active  { background: #ffe6a3; }
+    .tab.catalog.active   { background: #dbfae6; }
+    .tab.events.active    { background: #bbf2fd; }
+    .tab .icon {
+      font-size: 1.3rem;
+      margin-right: 6px;
+    }
+    .feature-panel {
+      width: 70vw;
+      max-width: 900px;
+      margin: 24px auto 0 auto;
+      background: #a6b9be;
+      border-radius: 24px;
+      padding: 38px 38px 38px 38px;
+      display: flex;
+      align-items: flex-start;
+      min-height: 240px;
+      box-sizing: border-box;
+    }
+    .feature-content {
+      flex: 1 1 60%;
+    }
+    .feature-title {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #23272a;
+      margin-bottom: 18px;
+    }
+    .feature-desc {
+      font-size: 1.08rem;
+      color: #3e4348;
+      line-height: 1.5em;
+      margin-bottom: 0;
+    }
+    .feature-image {
+      flex: 1 1 40%;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+    .feature-image-placeholder {
+      width: 300px;
+      height: 140px;
+      background: #98aeb6;
+      border-radius: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #6e7e8e;
+      font-size: 1.5rem;
+      font-family: monospace;
+      margin-left: 30px;
+    }
+    .footer-menu {
+      width: 65vw;
+      margin: 34px auto 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #5a6569;
+      padding: 9px 22px;
+      border-radius: 12px;
+      justify-content: space-between;
+      font-family: 'Fira Mono', monospace;
+      font-size: 1.13rem;
+      color: #dbe9ec;
+      box-shadow: 0 2px 8px 0 #7b8b9278;
+    }
+    .footer-menu .menu-btn {
+      padding: 7px 16px;
+      background: #293040;
+      border: none;
+      border-radius: 8px;
+      color: #dbe9ec;
+      font-family: inherit;
+      font-size: inherit;
+      cursor: pointer;
+    }
+    .footer-menu .book {
+      background: #89e4fa;
+      color: #23272a;
+      font-weight: bold;
+      border: 2px solid #23272a;
+      border-radius: 8px;
+      margin-left: 10px;
+      transition: background 0.2s;
+    }
+    .footer-menu .book:hover {
+      background: #54dbfc;
+    }
+    @media (max-width: 991px) {
+      .feature-panel { flex-direction: column; }
+      .feature-image { justify-content: center; margin-top: 20px; }
+      .footer-menu { width: 96vw; flex-wrap: wrap; }
+    }
+    @media (max-width: 650px) {
+      .header h1 { font-size: 2.1rem; }
+      .header h2 { font-size: 1.5rem; }
+      .feature-panel { width: 92vw; padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="subtitle">[ EFFICIENCY, SCALABILITY, AND AGILITY ]</div>
+  <div class="header">
+    <h1>Unparalleled</h1>
+    <h2>BSS/OSS Capabilities</h2>
+  </div>
+  <div class="tabs-container" id="tabs">
+    <button class="tab billing active" data-tab="billing"><span class="icon">🍩</span>BILLING</button>
+    <button class="tab charging" data-tab="charging"><span class="icon">🏢</span>CHARGING</button>
+    <button class="tab catalog" data-tab="catalog"><span class="icon">🗂</span>CATALOG</button>
+    <button class="tab events" data-tab="events"><span class="icon">✖</span>EVENTS</button>
+  </div>
+  <div class="feature-panel" id="feature-panel">
+    <div class="feature-content">
+      <div class="feature-title">Real-Time Convergent Billing</div>
+      <div class="feature-desc">
+        Instantaneous, accurate billing across all services and products.
+      </div>
+    </div>
+    <div class="feature-image">
+      <div class="feature-image-placeholder">[ Billing Img ]</div>
+    </div>
+  </div>
+  <div class="footer-menu">
+    <button class="menu-btn">&#8593;&nbsp;&nbsp;PRODUCTS +</button>
+    <button class="menu-btn">SOLUTIONS +</button>
+    <button class="menu-btn">RESOURCES +</button>
+    <button class="menu-btn">SERVICES</button>
+    <button class="menu-btn book">BOOK A MEETING</button>
+  </div>
+  <script>
+    // Simple tab functionality
+    const features = {
+      billing: {
+        title: 'Real-Time Convergent Billing',
+        desc: 'Instantaneous, accurate billing across all services and products.',
+        img: '[ Billing Img ]'
+      },
+      charging: {
+        title: 'Online Charging System',
+        desc: 'AI-powered insights that predict customer needs and drive personalized experiences.',
+        img: '[ Charging Img ]'
+      },
+      catalog: {
+        title: 'Product Catalog',
+        desc: 'Intuitive tools that empower customers to manage their accounts with ease, freeing up your team.',
+        img: '[ Catalog Img ]'
+      },
+      events: {
+        title: 'Event Management',
+        desc: 'Efficient tracking and management of events across your platform for seamless operations.',
+        img: '[ Events Img ]'
+      }
+    };
+
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        // Activate selected tab
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        // Update feature panel
+        const t = tab.dataset.tab;
+        document.querySelector('.feature-title').textContent = features[t].title;
+        document.querySelector('.feature-desc').textContent = features[t].desc;
+        document.querySelector('.feature-image-placeholder').textContent = features[t].img;
+      });
+    });
+  </script>
+</body>
+</html>

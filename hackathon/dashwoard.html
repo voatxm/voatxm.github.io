@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Custom Stats Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;600&display=swap');
+
+    /* Reset & base */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: #ebe6e1;
+      color: #3e3a36;
+      padding: 20px 30px;
+    }
+
+    .dashboard {
+      max-width: 900px;
+      margin: 30px auto;
+      display: flex;
+      justify-content: space-between;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 8px 20px rgb(0 0 0 / 10%);
+      flex: 1 1 280px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      min-width: 280px;
+    }
+
+    .title-group {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .title-group h3 {
+      font-weight: 600;
+      font-size: 1rem;
+      line-height: 1.12;
+      max-width: 160px;
+      margin: 0;
+    }
+    .unit {
+      white-space: nowrap;
+      font-weight: 300;
+      font-size: 0.9rem;
+      color: #77615f;
+      margin-left: 8px;
+      margin-top: 2px;
+    }
+
+    .main-number {
+      font-weight: 300;
+      font-size: 3.6rem;
+      line-height: 1;
+      letter-spacing: -0.08em;
+      color: #3e3a36;
+      margin-top: -6px;
+      margin-bottom: 6px;
+    }
+
+    .change-percent {
+      display: flex;
+      align-items: center;
+      font-weight: 600;
+      font-size: 1.05rem;
+      color: #9b6b62;
+      opacity: 0.85;
+      margin-bottom: 14px;
+      user-select: none;
+    }
+    .change-percent.up {
+      color: #9b6b62;
+    }
+    .change-percent.down {
+      color: #9b6b62;
+    }
+    .change-percent svg {
+      margin-left: 4px;
+      margin-right: 4px;
+      fill: currentColor;
+      width: 14px;
+      height: 14px;
+    }
+    .change-percent.up svg {
+      transform: rotate(-90deg);
+    }
+    .change-percent.down svg {
+      transform: rotate(90deg);
+    }
+
+    .bar-group {
+      user-select: none;
+    }
+    .bar-year {
+      font-weight: 600;
+      font-size: 0.87rem;
+      opacity: 0.65;
+      margin-bottom: 4px;
+    }
+    .bar-container {
+      background: #ddd5d3;
+      border-radius: 10px;
+      height: 12px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 10px;
+      background: #7c514f;
+      position: relative;
+      transition: width 1s ease;
+    }
+    .bar-label {
+      position: absolute;
+      right: 12px;
+      top: -24px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #7c514f;
+      user-select: text;
+    }
+
+    .links {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 400;
+      font-size: 0.9rem;
+      padding-top: 8px;
+      border-top: 1px solid #ddd0ca;
+      margin-top: 10px;
+      opacity: 0.75;
+      cursor: pointer;
+      color: #7c514f;
+      transition: color 0.3s ease;
+      user-select: none;
+    }
+    .links:hover {
+      color: #563533;
+    }
+    .links svg {
+      margin-left: 6px;
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+      transition: transform 0.3s ease;
+    }
+    .links:hover svg {
+      transform: translateX(6px);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .dashboard {
+        flex-direction: column;
+        margin: 20px 20px;
+      }
+      .card {
+        max-width: 100%;
+        min-width: auto;
+        padding: 20px 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <!-- Card 1 -->
+    <div class="card">
+      <div class="title-group">
+        <h3>Managed portfolio carbon footprint</h3>
+        <span class="unit">tCO<sub>2</sub>e</span>
+      </div>
+      <div class="main-number">45,048</div>
+      <div class="change-percent up" aria-label="Increase of 16 percent from 2019">
+        from 2019
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.41 15.41 12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
+        16%
+      </div>
+
+      <!-- Year bars -->
+      <div class="bar-group" aria-label="Carbon footprint over years">
+        <div class="bar-year" style="margin-bottom:3px;">2022</div>
+        <div class="bar-container" aria-hidden="true">
+          <div class="bar-fill" style="width: 100%;"></div><span class="bar-label">45,048</span>
+        </div>
+        <div class="bar-year" style="margin-bottom:3px;">2021</div>
+        <div class="bar-container" aria-hidden="true">
+          <div class="bar-fill" style="width: 31.3%;"></div><span class="bar-label">14,111</span>
+        </div>
+        <div class="bar-year" style="margin-bottom:3px;">2020</div>
+        <div class="bar-container" aria-hidden="true">
+          <div class="bar-fill" style="width: 72.9%;"></div><span class="bar-label">32,813</span>
+        </div>
+        <div class="bar-year" style="margin-bottom:3px;">2019</div>
+        <div class="bar-container" aria-hidden="true">
+          <div class="bar-fill" style="width: 85.9%;"></div><span class="bar-label">38,673</span>
+        </div>
+      </div>
+      <div class="links" role="link" tabindex="0" aria-label="See full breakdown of carbon footprint">
+        See full breakdown of carbon footprint
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.29 6.71 13.58 11 9.3 15.29 10.71 16.7 16.41 11 10.71 5.29z"/></svg>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="card">
+      <div class="title-group">
+        <h3>Managed portfolio energy intensity</h3>
+        <span class="unit">kWh/m<sup>2</sup></span>
+      </div>
+      <div class="main-number">123</div>
+      <div class="change-percent down" aria-label="Decrease of 22 percent from 2019">
+        from 2019
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.41 15.41 12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
+        22%
+      </div>
+
+      <div class="bar-group" aria-label="Energy intensity over years">
+        <div class="bar-year" style="margin-bottom:3px;">2022</div>
+        <div class="bar-container" aria-hidden="true">
+          <div class="bar-fill" style="width: 78.3%;"></div><span class="bar-label">123</span>
+        </div>
+        <div class="bar-year" style="margin-bottom:3px;">2021</div>
+        <div class="bar-container" aria-hidden="true">
+          <div class="bar-fill" style="width: 81.9%;"></div><span class="bar-label">128</span>
+        </div>
+        <div class="bar-year" style="margin-bottom:3px;">2020</div>
+        <div class="bar-container" aria-hidden="true">
+          <div class="bar-fill" style="width: 86.8%;"></div><span class="bar-label">135</span>
+        </div>
+        <div class="bar-year" style="margin-bottom:3px;">2019</div>
+        <div class="bar-container" aria-hidden="true">
+          <div class="bar-fill" style="width: 100%;"></div><span class="bar-label">157</span>
+        </div>
+      </div>
+      <div class="links" role="link" tabindex="0" aria-label="Download the data">
+        Download the data
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16v-10M16 12l-4 4-4-4"/></svg>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="card">
+      <div class="title-group">
+        <h3>Managed portfolio energy consumption</h3>
+        <span class="unit">kWh</span>
+      </div>
+      <div class="main-number">47,790,662</div>
+      <div class="change-percent down" aria-label="Decrease of 27 percent from 2019">
+        from 2019
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.41 15.41 12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
+        27%
+      </div>
+
+      <div class="bar-group" aria-label="Energy consumption over years">
+        <div class="bar-year" style="margin-bottom:3px;">2022</div>
+        <div class="bar-container" aria-hidden="true">
+          <div class="bar-fill" style="width: 73.3%;"></div><span class="bar-label">47,790,662</span>
+        </div>
+        <div class="bar-year" style="margin-bottom:3px;">2021</div>
+        <div class="bar-container" aria-hidden="true">
+          <div class="bar-fill" style="width: 75.6%;"></div><span class="bar-label">49,324,077</span>
+        </div>
+        <div class="bar-year" style="margin-bottom:3px;">2020</div>
+        <div class="bar-container" aria-hidden="true">
+          <div class="bar-fill" style="width: 74.8%;"></div><span class="bar-label">48,784,205</span>
+        </div>
+        <div class="bar-year" style="margin-bottom:3px;">2019</div>
+        <div class="bar-container" aria-hidden="true">
+          <div class="bar-fill" style="width: 100%;"></div><span class="bar-label">65,198,706</span>
+        </div>
+      </div>
+      <div class="links" role="link" tabindex="0" aria-label="Download the data">
+        Download the data
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16v-10M16 12l-4 4-4-4"/></svg>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
