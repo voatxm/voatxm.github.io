@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Auto Image Slider — Hover for details</title>
+<style>
+  :root{
+    --bg:#0b1220;
+    --card-radius:12px;
+    --accent:#7cd2ff;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(180deg,#071024,#061220);
+    font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+    color:#eaf6ff;
+    padding:24px;
+  }
+
+  .slider {
+    width: 820px;
+    max-width:95vw;
+    height: 460px;
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--card-radius);
+    box-shadow: 0 10px 30px rgba(2,6,23,0.7);
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  }
+
+  .track {
+    display:flex;
+    height:100%;
+    transition: transform 600ms cubic-bezier(.2,.9,.2,1);
+    will-change: transform;
+  }
+
+  .slide {
+    position:relative;
+    flex: 0 0 100%;
+    height:100%;
+    display:block;
+    overflow:hidden;
+  }
+
+  .slide img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    transform-origin:center center;
+    transition: transform 420ms ease;
+  }
+
+  /* overlay shown on hover */
+  .overlay {
+    position:absolute;
+    left:0;right:0;bottom:0;
+    padding:16px 20px;
+    background: linear-gradient(180deg, rgba(0,0,0,0.0), rgba(0,0,0,0.56));
+    color:#fff;
+    transform: translateY(12px);
+    opacity: 0;
+    transition: opacity 220ms ease, transform 300ms cubic-bezier(.2,.9,.2,1);
+    pointer-events: none;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+  }
+  .slide:hover .overlay,
+  .slide:focus-within .overlay {
+    opacity:1;
+    transform: translateY(0);
+    pointer-events:auto;
+  }
+
+  .info {
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+  }
+  .title { font-weight:700; font-size:18px; letter-spacing:0.2px; }
+  .desc  { font-size:13px; opacity:0.88; color: rgba(240,250,255,0.92); max-width:60%; }
+
+  .price {
+    background: linear-gradient(180deg,#e6fbff,#c9f3ff);
+    color:#003a4a;
+    font-weight:800;
+    padding:10px 14px;
+    border-radius:10px;
+    box-shadow: 0 6px 18px rgba(30,150,200,0.08);
+    min-width:110px;
+    text-align:center;
+  }
+
+  /* hover scale effect for image */
+  .slide:hover img { transform: scale(1.04); }
+
+  /* controls / indicators */
+  .dots {
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+    bottom:12px;
+    display:flex;
+    gap:8px;
+    pointer-events:auto;
+    z-index:10;
+  }
+  .dot {
+    width:10px;height:10px;border-radius:999px;background:rgba(255,255,255,0.12);
+    cursor:pointer;
+    transition: transform .2s ease, background .2s ease, opacity .2s;
+  }
+  .dot.active {
+    transform: scale(1.5);
+    background: var(--accent);
+    box-shadow: 0 6px 16px rgba(124,210,255,0.12);
+  }
+
+  /* next/prev semi-transparent arrows (appear on hover) */
+  .arrow {
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    width:42px;height:42px;border-radius:10px;
+    background:rgba(0,0,0,0.28);
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;cursor:pointer;z-index:8;
+    transition: opacity .18s ease, transform .18s ease;
+    opacity:0;
+  }
+  .slider:hover .arrow { opacity:1; }
+  .arrow.left { left:12px; }
+  .arrow.right{ right:12px; }
+  .arrow svg { width:18px;height:18px;opacity:0.95; }
+
+  /* small responsive */
+  @media (max-width:920px){
+    .slider{height:420px}
+  }
+  @media (max-width:560px){
+    .slider{height:320px}
+    .overlay .desc { display:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="slider" id="slider" aria-roledescription="carousel">
+  <div class="track" id="track">
+    <!-- slide 1 -->
+    <div class="slide" tabindex="0" data-title="Elegant Lamp" data-desc="Warm ambient lamp with wooden base." data-price="$79">
+      <img src="1.jpg" alt="Elegant Lamp">
+      <div class="overlay" aria-hidden="true">
+        <div class="info">
+          <div class="title">Elegant Lamp</div>
+          <div class="desc">Warm ambient lamp with wooden base and dimmable LED.</div>
+        </div>
+        <div class="price">$79</div>
+      </div>
+    </div>
+
+    <!-- slide 2 -->
+    <div class="slide" tabindex="0" data-title="Modern Chair" data-desc="Comfortable ergonomic chair for work." data-price="$199">
+      <img src="2.jpg" alt="Modern Chair">
+      <div class="overlay" aria-hidden="true">
+        <div class="info">
+          <div class="title">Modern Chair</div>
+          <div class="desc">Comfortable ergonomic chair with breathable mesh back.</div>
+        </div>
+        <div class="price">$199</div>
+      </div>
+    </div>
+
+    <!-- slide 3 -->
+    <div class="slide" tabindex="0" data-title="Sound Speaker" data-desc="Portable speaker with deep bass." data-price="$129">
+      <img src="3.jpeg" alt="Sound Speaker">
+      <div class="overlay" aria-hidden="true">
+        <div class="info">
+          <div class="title">Sound Speaker</div>
+          <div class="desc">Portable Bluetooth speaker with rich, deep bass.</div>
+        </div>
+        <div class="price">$129</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- controls -->
+  <div class="arrow left" id="prevBtn" aria-hidden="true" title="Previous (hover to show)"><svg viewBox="0 0 24 24" fill="none"><path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  <div class="arrow right" id="nextBtn" aria-hidden="true" title="Next (hover to show)"><svg viewBox="0 0 24 24" fill="none"><path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+
+  <!-- dots -->
+  <div class="dots" id="dots" aria-hidden="true"></div>
+</div>
+
+<script>
+(function(){
+  const slider = document.getElementById('slider');
+  const track  = document.getElementById('track');
+  const slides = Array.from(track.children);
+  const dotsWrap = document.getElementById('dots');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+
+  let index = 0;
+  const count = slides.length;
+  const intervalMS = 3000; // autoplay delay
+  let timer = null;
+  let isPaused = false;
+
+  // build dots
+  for (let i=0;i<count;i++){
+    const d = document.createElement('button');
+    d.className = 'dot';
+    d.type = 'button';
+    d.dataset.idx = i;
+    d.setAttribute('aria-label', 'Go to slide ' + (i+1));
+    dotsWrap.appendChild(d);
+  }
+  const dots = Array.from(dotsWrap.children);
+
+  function goTo(i, immediate = false){
+    index = ((i % count) + count) % count;
+    const translateX = -index * 100;
+    if (immediate) {
+      track.style.transition = 'none';
+      track.style.transform = `translateX(${translateX}%)`;
+      // force reflow then restore transition
+      void track.offsetWidth;
+      track.style.transition = '';
+    } else {
+      track.style.transform = `translateX(${translateX}%)`;
+    }
+    updateDots();
+  }
+
+  function updateDots(){
+    dots.forEach((d, idx) => d.classList.toggle('active', idx === index));
+  }
+
+  function next(){
+    goTo(index + 1);
+  }
+  function prev(){
+    goTo(index - 1);
+  }
+
+  // autoplay
+  function startAutoplay(){
+    stopAutoplay();
+    timer = setInterval(() => {
+      if (!isPaused) next();
+    }, intervalMS);
+  }
+  function stopAutoplay(){
+    if (timer) { clearInterval(timer); timer = null; }
+  }
+
+  // pause on hover/focus, resume on leave
+  slider.addEventListener('mouseenter', () => { isPaused = true; });
+  slider.addEventListener('mouseleave', () => { isPaused = false; });
+  slider.addEventListener('focusin', () => { isPaused = true; });
+  slider.addEventListener('focusout', () => { isPaused = false; });
+
+  // dot click
+  dots.forEach(d => d.addEventListener('click', (e) => goTo(parseInt(e.currentTarget.dataset.idx, 10))));
+
+  // arrow click
+  nextBtn.addEventListener('click', next);
+  prevBtn.addEventListener('click', prev);
+
+  // keyboard navigation
+  slider.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') prev();
+    if (e.key === 'ArrowRight') next();
+  });
+
+  // mobile touch: swipe support (simple)
+  let startX = 0, vx = 0, touching = false;
+  slider.addEventListener('touchstart', (e) => {
+    stopAutoplay();
+    touching = true;
+    startX = e.touches[0].clientX;
+  }, { passive: true });
+  slider.addEventListener('touchmove', (e) => {
+    if (!touching) return;
+    const dx = e.touches[0].clientX - startX;
+    // small drag effect
+    track.style.transform = `translateX(${ -index*100 + (dx / slider.clientWidth)*100 }%)`;
+  }, { passive: true });
+  slider.addEventListener('touchend', (e) => {
+    touching = false;
+    const dx = (e.changedTouches[0].clientX - startX);
+    if (Math.abs(dx) > 40) {
+      if (dx < 0) next(); else prev();
+    } else {
+      goTo(index, true);
+    }
+    startAutoplay();
+  }, { passive: true });
+
+  // lazy populate overlay text from data attributes (so you can change easy)
+  slides.forEach(slide => {
+    const title = slide.dataset.title;
+    const desc  = slide.dataset.desc;
+    const price = slide.dataset.price;
+    const overlay = slide.querySelector('.overlay');
+    if (overlay) {
+      const t = overlay.querySelector('.title');
+      const d = overlay.querySelector('.desc');
+      const p = overlay.querySelector('.price');
+      if (t && title) t.textContent = title;
+      if (d && desc)  d.textContent = desc;
+      if (p && price) p.textContent = price;
+    }
+  });
+
+  // start
+  goTo(0, true);
+  startAutoplay();
+
+  // visibility: pause when tab hidden
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) { isPaused = true; } else { isPaused = false; }
+  });
+
+  // accessibility: stop autoplay if user interacts with controls
+  [nextBtn, prevBtn, ...dots].forEach(el => el.addEventListener('focus', () => { isPaused = true; }));
+
+  // small improvement: when mouse enters a slide show overlay immediately
+  slides.forEach((s, i) => {
+    s.addEventListener('mouseenter', () => {
+      // ensure the overlay for that slide is visible by pausing
+      isPaused = true;
+      goTo(i);
+    });
+  });
+
+})();
+</script>
+</body>
+</html>

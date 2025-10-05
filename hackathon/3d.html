@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cube Striking Game</title>
+    <style>
+        body { margin: 0; overflow: hidden; background: #fff; }
+        canvas { display: block; }
+    </style>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.module.min.js",
+                "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/"
+            }
+        }
+    </script>
+</head>
+<body>
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+        // Scene setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        document.body.appendChild(renderer.domElement);
+
+        // Orbit controls for camera interaction
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+
+        // Lighting
+        const pointLight = new THREE.PointLight(0xffffff, 2.5, 150); // White light
+        pointLight.position.set(0, 20, 20);
+        scene.add(pointLight);
+
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.7); // White ambient light
+        scene.add(ambientLight);
+
+        // Cubes with different shapes
+        const cubes = [];
+        const numCubes = 30; // 30 cubes
+        const cubeSizeBase = 10; // 100px equivalent
+        const gravityStrength = 0.05;
+        const repulsionStrength = 25;
+        const closeRepulsionStrength = 0.1; // New: soft repulsion to prevent merging
+        const damping = 0.95;
+        const collisionElasticity = 0.8;
+
+        // Expanded variety of cube shapes to ensure distinctiveness
+        const cubeTypes = [
+            new THREE.BoxGeometry(cubeSizeBase, cubeSizeBase, cubeSizeBase), // Standard
+            new THREE.BoxGeometry(cubeSizeBase * 1.5, cubeSizeBase * 0.5, cubeSizeBase * 0.8), // Flattened
+            new THREE.BoxGeometry(cubeSizeBase * 0.5, cubeSizeBase * 1.5, cubeSizeBase * 1.2), // Tall
+            new THREE.BoxGeometry(cubeSizeBase * 0.8, cubeSizeBase * 0.8, cubeSizeBase * 1.5), // Stretched
+            new THREE.BoxGeometry(cubeSizeBase * 1.2, cubeSizeBase * 0.7, cubeSizeBase * 0.9), // Irregular 1
+            new THREE.BoxGeometry(cubeSizeBase * 0.9, cubeSizeBase * 1.2, cubeSizeBase * 0.7), // Irregular 2
+            new THREE.BoxGeometry(cubeSizeBase * 1.1, cubeSizeBase * 1.1, cubeSizeBase * 0.6), // Irregular 3
+            new THREE.BoxGeometry(cubeSizeBase * 0.6, cubeSizeBase * 1.1, cubeSizeBase * 1.1), // Irregular 4
+            new THREE.BoxGeometry(cubeSizeBase * 1.3, cubeSizeBase * 0.4, cubeSizeBase * 1.0), // Irregular 5
+            new THREE.BoxGeometry(cubeSizeBase * 0.4, cubeSizeBase * 1.3, cubeSizeBase * 1.0)  // Irregular 6
+        ];
+
+        for (let i = 0; i < numCubes; i++) {
+            const geometry = cubeTypes[i % cubeTypes.length]; // Cycle through varied shapes
+            const material = new THREE.MeshStandardMaterial({
+                color: 0xffffff, // Uniform white color
+                metalness: 0.9,
+                roughness: 0.1 // Shiny liquid glass effect
+            });
+            const cube = new THREE.Mesh(geometry, material);
+            // Spread cubes in a wider circular pattern
+            const angle = (2 * Math.PI * i) / numCubes;
+            const radius = 30;
+            cube.position.set(
+                Math.cos(angle) * radius,
+                Math.sin(angle) * radius,
+                (Math.random() - 0.5) * 20
+            );
+            cube.velocity = new THREE.Vector3(0, 0, 0);
+            scene.add(cube);
+            cubes.push(cube);
+        }
+
+        camera.position.set(0, 0, 70);
+        controls.target.set(0, 0, 0);
+
+        // Raycaster for mouse click
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+
+        // Handle click to strike individual cubes (new functionality)
+        window.addEventListener('click', (event) => {
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(cubes);
+
+            if (intersects.length > 0) {
+                const clickedCube = intersects[0].object;
+                strikeCube(clickedCube);
+            }
+        });
+
+        function strikeCube(cube) {
+            // Apply force to the clicked cube in a random direction
+            const direction = new THREE.Vector3(
+                (Math.random() - 0.5) * 2,
+                (Math.random() - 0.5) * 2,
+                (Math.random() - 0.5) * 2
+            ).normalize();
+            const force = repulsionStrength;
+            cube.velocity.add(direction.multiplyScalar(force));
+        }
+
+        // Collision detection and response
+        function handleCollisions() {
+            for (let i = 0; i < cubes.length; i++) {
+                for (let j = i + 1; j < cubes.length; j++) {
+                    const cube1 = cubes[i];
+                    const cube2 = cubes[j];
+                    const dist = cube1.position.distanceTo(cube2.position);
+                    const minDist = (cube1.geometry.parameters.width + cube2.geometry.parameters.width) / 2; // Adjusted for size
+                    if (dist < minDist) {
+                        const normal = new THREE.Vector3().subVectors(cube2.position, cube1.position).normalize();
+                        const relativeVel = new THREE.Vector3().subVectors(cube2.velocity, cube1.velocity);
+                        const velAlongNormal = relativeVel.dot(normal);
+                        if (velAlongNormal > 0) continue;
+
+                        const impulse = (2 * velAlongNormal) / 2;
+                        const impulseVec = normal.multiplyScalar(impulse * collisionElasticity);
+
+                        cube1.velocity.add(impulseVec);
+                        cube2.velocity.sub(impulseVec);
+
+                        const overlap = minDist - dist;
+                        const separation = normal.multiplyScalar(overlap / 2 + 0.1); // Extra separation to prevent sticking
+                        cube1.position.sub(separation);
+                        cube2.position.add(separation);
+                    }
+                }
+            }
+        }
+
+        // Soft repulsion to prevent merging
+        function handleSoftRepulsion() {
+            for (let i = 0; i < cubes.length; i++) {
+                for (let j = i + 1; j < cubes.length; j++) {
+                    const cube1 = cubes[i];
+                    const cube2 = cubes[j];
+                    const dist = cube1.position.distanceTo(cube2.position);
+                    const minDist = (cube1.geometry.parameters.width + cube2.geometry.parameters.width) / 2 * 1.5; // Wider range for soft repulsion
+                    if (dist < minDist && dist > minDist / 2) {
+                        const normal = new THREE.Vector3().subVectors(cube2.position, cube1.position).normalize();
+                        const force = closeRepulsionStrength / (dist * dist);
+                        const repulsionVec = normal.multiplyScalar(force);
+                        cube1.velocity.sub(repulsionVec);
+                        cube2.velocity.add(repulsionVec);
+                    }
+                }
+            }
+        }
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+
+            cubes.forEach(cube => {
+                // Gravity towards center
+                const gravityDir = new THREE.Vector3().subVectors(new THREE.Vector3(0, 0, 0), cube.position).normalize();
+                const gravity = gravityDir.multiplyScalar(gravityStrength);
+                cube.velocity.add(gravity);
+
+                // Damping for heavy feel
+                cube.velocity.multiplyScalar(damping);
+
+                // Update position
+                cube.position.add(cube.velocity);
+
+                // Rotate for dynamic 3D effect
+                cube.rotation.x += 0.01;
+                cube.rotation.y += 0.01;
+                cube.rotation.z += 0.005;
+            });
+
+            // Handle soft repulsion and collisions
+            handleSoftRepulsion();
+            handleCollisions();
+
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // Responsive resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>

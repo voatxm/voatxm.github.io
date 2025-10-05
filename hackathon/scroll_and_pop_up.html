@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Joyful Scroll Video</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #ff6f61, #ffcc5c, #88d8b0);
+      height: 200vh;
+      overflow-x: hidden;
+      color: #fff;
+    }
+    .video-container {
+      position: absolute;
+      top: 50vh;
+      left: 5%;
+      transform: translateY(-50%);
+      width: 300px;
+      height: 200px;
+      background: #fff;
+      border-radius: 15px;
+      overflow: hidden;
+      transition: width 0.5s ease, height 0.5s ease;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      border: 4px solid #ff6f61;
+      z-index: 1000;
+    }
+    .video-container video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+    .video-container.expanded {
+      width: 80vw;
+      height: 80vh;
+      max-width: 1200px;
+      max-height: 600px;
+      left: 5%;
+    }
+    .controls {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 15px;
+    }
+    .controls button {
+      background: #88d8b0;
+      border: none;
+      color: #fff;
+      padding: 12px 25px;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: transform 0.3s ease, background 0.3s ease;
+      font-weight: bold;
+      text-shadow: 1px 1px #ffcc5c;
+    }
+    .controls button:hover {
+      transform: scale(1.1);
+      background: #ffcc5c;
+    }
+    .text-content {
+      padding: 40px 20px;
+      text-align: center;
+      margin-top: 100vh;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+    }
+    .text-content h1 {
+      font-size: 2.5em;
+      color: #ff6f61;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    .text-content p {
+      font-size: 1.2em;
+      color: #333;
+    }
+    @media (max-width: 768px) {
+      .video-container {
+        width: 90vw;
+        height: 200px;
+        left: 5%;
+      }
+      .video-container.expanded {
+        height: 50vh;
+        width: 90vw;
+      }
+      .text-content h1 {
+        font-size: 1.8em;
+      }
+      .text-content p {
+        font-size: 1em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="video-container">
+    <video autoplay loop muted>
+      <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <div class="controls">
+      <button onclick="document.querySelector('video').play()">Play 🎬</button>
+      <button onclick="document.querySelector('video').pause()">Pause ⏸</button>
+    </div>
+  </div>
+  <div class="text-content">
+    <h1>Welcome to the Fun Zone! 🎉</h1>
+    <p>Now that you've enjoyed the video, dive into this exciting content! Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+    <p>Keep exploring for more joy! 🌟</p>
+  </div>
+
+  <script>
+    const videoContainer = document.querySelector('.video-container');
+    let isExpanded = false;
+    let lastScrollY = 0;
+
+    window.addEventListener('scroll', () => {
+      const scrollPosition = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const videoTop = videoContainer.getBoundingClientRect().top + scrollPosition;
+
+      // Expand when scrolling down past halfway
+      if (videoTop < windowHeight / 2 && scrollPosition > lastScrollY && !isExpanded) {
+        videoContainer.classList.add('expanded');
+        isExpanded = true;
+      }
+
+      // Shrink when scrolling up past halfway or past video
+      if ((videoTop > windowHeight / 2 && scrollPosition < lastScrollY && isExpanded) || (videoTop > windowHeight && isExpanded)) {
+        videoContainer.classList.remove('expanded');
+        isExpanded = false;
+      }
+
+      lastScrollY = scrollPosition <= 0 ? 0 : scrollPosition;
+    });
+
+    // Ensure video starts playing
+    document.querySelector('video').play();
+  </script>
+</body>
+</html>
